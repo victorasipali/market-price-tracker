@@ -1,56 +1,70 @@
-# Welcome to your Expo app 👋
+# Market Price Tracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native app for recording and comparing fresh-produce prices at Papua New Guinea markets. It works fully offline and includes a weather forecast for Lae, Port Moresby and Mount Hagen.
 
-## Get started
+Built with **Expo SDK 57**, **Expo Router** and **TypeScript** for IS325 Mobile Application Development, Lab 9.
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+- **Record prices.** Each entry holds the produce, market, price in Kina and unit (heap, bundle, kg, and so on).
+- **Validated form.** Every field is checked, and the Save button stays disabled until the entry is valid.
+- **Searchable list.** Filter by produce or market, without case sensitivity. Different messages show for "no entries yet" and "no matches".
+- **Detail screen.** Shows every field, with a confirmation step before deleting.
+- **Works offline.** Entries are stored on the device with AsyncStorage.
+- **Weather tab.** A 7-day forecast from Open-Meteo, with no API key needed. Pull down to refresh. When offline, it shows a clear error with a retry button.
+- **Loading indicators.** Every loading, saving and deleting action shows one.
 
-2. Start the app
+## Project structure
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+src/
+  app/                    Screens (Expo Router: each file is a route)
+    _layout.tsx           Root stack
+    (tabs)/
+      _layout.tsx         Bottom tabs: Prices, Add, Weather
+      index.tsx           Prices list with search
+      add.tsx             Add-price form
+      weather.tsx         7-day forecast
+    entry/[id].tsx        Entry detail and delete
+  components/             Reusable UI (EntryRow, FormField)
+  services/               Storage and network code; screens never touch AsyncStorage directly
+  constants/theme.ts      Shared colours
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Getting started
 
-### Other setup steps
+Prerequisites: Node.js 20 or newer, and Expo Go on an Android phone.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```
+git clone https://github.com/<your-username>/market-price-tracker.git
+cd market-price-tracker
+npm install
+npx expo start
+```
 
-## Learn more
+Scan the QR code with Expo Go. If your phone and PC are on different networks, run `npx expo start --tunnel`.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Building the APK
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+npm install -g eas-cli
+eas login
+npx expo-doctor
+eas build --platform android --profile preview
+```
 
-## Join the community
+The `preview` profile in `eas.json` produces an installable `.apk`.
 
-Join our community of developers creating universal apps.
+## Tech stack
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+| Area         | Library                                   |
+| ------------ | ----------------------------------------- |
+| Framework    | React Native 0.86, Expo SDK 57            |
+| Navigation   | Expo Router (stack and tabs)              |
+| Storage      | @react-native-async-storage/async-storage |
+| Icons        | @expo/vector-icons (Ionicons)             |
+| Weather data | [Open-Meteo](https://open-meteo.com)      |
+
+## Author
+
+Victor Asipali, Bachelor of Business in Information Technology, Year 3
